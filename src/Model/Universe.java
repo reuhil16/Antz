@@ -1,8 +1,10 @@
+package Model;
+
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 
-public class Model {
+public class Universe {
 	
 	public HashMap<String, AntType> species;
 	
@@ -11,15 +13,8 @@ public class Model {
 	public Ant[] population;
 	
 	
-
-	class Ant {
-		private AntType type;
-		public int lastDir;
-		public Point position;
+	public void moveOneStep() {
 		
-		public Ant(AntType type) {
-			this.type = type;
-		}
-
 	}
+	
 }
