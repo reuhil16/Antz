@@ -1,12 +1,10 @@
 import java.util.Scanner;
 
-import Model.AntType;
-import Model.Universe;
-
+import Model.*;
 public class Application {
 
 	public static void main(String[] args) {
-		Universe modle = new Universe();
+		Universe model = new Universe();
 		
 		Scanner sc = new Scanner(System.in);
 		String[] line;
@@ -32,10 +30,32 @@ public class Application {
 				System.err.println("Malformed input.");
 				System.exit(1);
 			}
+			int[] directions = new int[4];
+			for (int i = 0; i < 4; i++){
+				switch(line[1].charAt(i)){
+				case 'N':
+					directions[i] = 0;
+					break;
+				case 'E':
+					directions[i] = 1;
+					break;
+				case 'S':
+					directions[i] = 2;
+					break;
+				case 'W':
+					directions[i] = 3;
+					break;
+				default:
+					System.err.println("Malformed input.");
+					System.exit(1);
+					break;
+				}
+			}
+			result.addChromosome(line[0].charAt(0), directions, line[2].toCharArray());
 			
 		}
 		
-		return null;
+		return result;
 	}
 
 }

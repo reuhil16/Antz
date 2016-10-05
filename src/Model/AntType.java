@@ -13,8 +13,20 @@ public class AntType {
 		return DNA.get(state).states[lastDir];
 	}
 	
+	public void addChromosome(char state, int[] directions, char[] states){
+		DNA.put(state, new Chromosome(directions, states));
+	}
+	
 	class Chromosome {
 		int[] directions;
 		char[] states;
+		
+		
+		public Chromosome(int[] directions, char[] states) {
+			this.directions = directions;
+			this.states = states;
+		}
+		
+		
 	}
 }
