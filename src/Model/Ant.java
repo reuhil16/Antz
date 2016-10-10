@@ -16,17 +16,16 @@ public class Ant {
 	
 	public void moveOneStep() {
 
-            int curDir = lastDir;
-
-            lastDir = type.getMove(curDir,universe.world.get(position));
-            universe.world.put(position, type.getState(curDir,universe.world.get(position)));
-
-            switch(curDir){
+            lastDir = type.getMove(lastDir,universe.world.get(position));
+            
+            switch(lastDir){
                 case 0: position.translate(1,0); break;
                 case 1: position.translate(-1,0); break;
                 case 2: position.translate(0,-1); break;
                 case 3: position.translate(0,1); break;
             }
+
+            universe.world.put(position, type.getState(lastDir,universe.world.get(position)));
 		
 	}
 }
