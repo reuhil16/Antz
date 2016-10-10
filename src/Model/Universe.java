@@ -13,7 +13,18 @@ public class Universe {
 	
 	
 	public void moveOneStep() {
-		
+            
+            for(Ant ant: population){
+                ant.moveOneStep();
+            }
+
 	}
-	
+
+    public void moveNSteps(int n){
+        
+	for(int i=0; i<n; i++){
+            moveOneStep();
+        }
+    }
+    
 }
