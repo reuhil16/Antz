@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -90,6 +91,14 @@ public class Application {
 				printAndExit("Invalid world state '" + model.world.get(p) 
 				+ "' at position " + p.toString(), null);
 			}
+		}
+		
+		if (args.length > 0) {
+			try {
+				model.moveNSteps(Integer.valueOf(args[0]));
+			} catch (NumberFormatException e) {}
+			
+			System.out.println(Arrays.toString(model.population));
 		}
 		
 	}

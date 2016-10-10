@@ -20,6 +20,12 @@ public class Universe {
             }
 
 	}
+	
+	public Character getState(Point position){
+		if (world.containsKey(position))
+			return world.get(position);
+		return defaultState;
+	}
 
     public void moveNSteps(int n){
         
