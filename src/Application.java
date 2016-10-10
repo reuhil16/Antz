@@ -6,23 +6,23 @@ import java.util.Scanner;
 
 import Model.*;
 public class Application {
-	
+
 	private static Universe model;
 
 	public static void main(String[] args) {
 		model = new Universe();
 		HashSet<Character> worldStates = new HashSet<>();
 		ArrayList<Ant> ants = new ArrayList<>();
-		
+
 		Scanner sc = new Scanner(System.in);
 		String[] line;
-		
+
 		while(sc.hasNextLine()) {
 			line = sc.nextLine().trim().split("\\s+");
-			
+
 			if (line.length == 0)
 				continue;
-			
+
 			if (line.length == 2){
 				if (line[0].equalsIgnoreCase("ant")){
 					if (validateAntName(line[1])){
@@ -32,7 +32,7 @@ public class Application {
 						printAndExit("Duplicate or invalid Ant name:", line);
 					}
 				} 
-				
+
 				if (line[0].equalsIgnoreCase("World")){
 					model.defaultState = line[1].charAt(0);
 					for (char c : line[1].toCharArray())
@@ -40,10 +40,10 @@ public class Application {
 					continue;
 				} 
 			} 
-			
+
 			if (line.length == 3) {
 				int x = 0, y = 0;
-				
+
 				if (model.species.containsKey(line[0])){
 					try {
 						x = Integer.valueOf(line[1]);
@@ -56,7 +56,7 @@ public class Application {
 					ants.add(ant);
 					continue;
 				} 
-				
+
 				if (line[2].length() == 1){
 					try {
 						x = Integer.valueOf(line[0]);
@@ -68,7 +68,7 @@ public class Application {
 					continue;
 				}
 			}
-			
+
 			printAndExit("Invalid line:", line);
 		}
 		if (worldStates.isEmpty())
@@ -92,21 +92,21 @@ public class Application {
 				+ "' at position " + p.toString(), null);
 			}
 		}
-		
+
 		if (args.length > 0) {
 			try {
 				model.moveNSteps(Integer.valueOf(args[0]));
 			} catch (NumberFormatException e) {}
-			
+
 			System.out.println(Arrays.toString(model.population));
 		}
-		
+
 	}
-	
+
 	public static AntType parseAnt(Scanner sc, String name){
 		String[] line;
 		AntType result = new AntType(name);
-		
+
 		while(sc.hasNextLine()) {
 			line = sc.nextLine().trim().split("\\s+");
 			if (line[0].equalsIgnoreCase("END"))
@@ -136,12 +136,12 @@ public class Application {
 				}
 			}
 			result.addChromosome(line[0].charAt(0), directions, line[2].toCharArray());
-			
+
 		}
-		
+
 		return result;
 	}
-	
+
 	public static boolean validateAntName(String name){
 		if (model.species.containsKey(name))
 			return false;
@@ -153,7 +153,7 @@ public class Application {
 		} catch (NumberFormatException e){}
 		return true;
 	}
-	
+
 	public static void printAndExit(String message, String[] line){
 		System.err.println(message);
 		if (line != null && line.length > 0){
