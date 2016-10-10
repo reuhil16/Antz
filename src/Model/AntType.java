@@ -4,12 +4,18 @@ import java.util.HashMap;
 
 public class AntType {
 	private final HashMap<Character, Chromosome> DNA = new HashMap<>();
+	public final String name;
+
 	
-	public int getMove(int lastDir, char state){
+	public AntType(String name) {
+		this.name = name;
+	}
+
+	public int getMove(int lastDir, Character state){
 		return DNA.get(state).directions[lastDir];
 	}
 	
-	public char getState(int lastDir, char state){
+	public Character getState(int lastDir, Character state){
 		return DNA.get(state).states[lastDir];
 	}
 	
