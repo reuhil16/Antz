@@ -19,7 +19,7 @@ public class Ant {
             int curDir = lastDir;
 
             lastDir = type.getMove(curDir,universe.world.get(position));
-            universe.world.put(position, type.getState(curDir,universe.get(position)));
+            universe.world.put(position, type.getState(curDir,universe.world.get(position)));
 
             switch(curDir){
                 case 0: position.translate(1,0); break;
