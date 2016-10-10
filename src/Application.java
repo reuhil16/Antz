@@ -5,9 +5,11 @@ import java.util.Scanner;
 
 import Model.*;
 public class Application {
+	
+	private static Universe model;
 
 	public static void main(String[] args) {
-		Universe model = new Universe();
+		model = new Universe();
 		HashSet<Character> worldStates = new HashSet<>();
 		ArrayList<Ant> ants = new ArrayList<>();
 		
@@ -22,7 +24,7 @@ public class Application {
 			
 			if (line.length == 2){
 				if (line[0].equalsIgnoreCase("ant")){
-					if (!model.species.containsKey(line[1])){
+					if (validateAntName(line[1])){
 						model.species.put(line[1], parseAnt(sc, line[1]));
 						continue;
 					} else {
@@ -31,6 +33,7 @@ public class Application {
 				} 
 				
 				if (line[0].equalsIgnoreCase("World")){
+					model.defaultState = line[1].charAt(0);
 					for (char c : line[1].toCharArray())
 						worldStates.add(c);
 					continue;
@@ -67,7 +70,8 @@ public class Application {
 			
 			printAndExit("Invalid line:", line);
 		}
-		
+		if (worldStates.isEmpty())
+			printAndExit("Allowed states not specified.", null);
 		model.population = ants.toArray(new Ant[ants.size()]);
 		for (AntType a : model.species.values()){
 			for (Character c : worldStates){
@@ -127,6 +131,18 @@ public class Application {
 		}
 		
 		return result;
+	}
+	
+	public static boolean validateAntName(String name){
+		if (model.species.containsKey(name))
+			return false;
+		if (name.equalsIgnoreCase("size"))
+			return false;
+		try {
+			Integer.valueOf(name);
+			return false;
+		} catch (NumberFormatException e){}
+		return true;
 	}
 	
 	public static void printAndExit(String message, String[] line){

@@ -11,6 +11,7 @@ public class Universe {
 	
 	public Ant[] population;
 	
+	public Character defaultState;
 	
 	public void moveOneStep() {
 		
