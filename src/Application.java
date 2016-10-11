@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 public class Application {
-  private static Universe model;
+  private static Universe universe;
 
   public static void main (String[] args) {
-    model = new Universe();
+    universe = new Universe();
     HashSet<Character> worldStates = new HashSet<>();
     ArrayList<Ant> ants = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class Application {
       if (line.length == 2) {
         if (line[0].equalsIgnoreCase("ant")) {
           if (validateAntName(line[1])) {
-            model.species.put(line[1], parseAnt(sc, line[1]));
+            universe.species.put(line[1], parseAnt(sc, line[1]));
             continue;
           } else {
             printAndExit("Duplicate or invalid Ant name:", line);
@@ -37,7 +37,7 @@ public class Application {
         }
 
         if (line[0].equalsIgnoreCase("World")) {
-          model.defaultState = line[1].charAt(0);
+          universe.defaultState = line[1].charAt(0);
           for (char c : line[1].toCharArray()) {
             worldStates.add(c);
           }
@@ -48,14 +48,14 @@ public class Application {
       if (line.length == 3) {
         int x = 0, y = 0;
 
-        if (model.species.containsKey(line[0])) {
+        if (universe.species.containsKey(line[0])) {
           try {
             x = Integer.valueOf(line[1]);
             y = Integer.valueOf(line[2]);
           } catch (NumberFormatException e) {
             printAndExit("Invalid ant position:", line);
           }
-          Ant ant = new Ant(model, model.species.get(line[0]));
+          Ant ant = new Ant(universe, universe.species.get(line[0]));
           ant.position = new Point(x, y);
           ants.add(ant);
           continue;
@@ -68,7 +68,7 @@ public class Application {
           } catch (NumberFormatException e) {
             printAndExit("Invalid ant position:", line);
           }
-          model.world.put(new Point(x, y), line[2].charAt(0));
+          universe.world.put(new Point(x, y), line[2].charAt(0));
           continue;
         }
       }
@@ -80,9 +80,9 @@ public class Application {
       printAndExit("Allowed states not specified.", null);
     }
 
-    model.population = ants.toArray(new Ant[ants.size()]);
+    universe.population = ants.toArray(new Ant[ants.size()]);
 
-    for (AntType a : model.species.values()) {
+    for (AntType a : universe.species.values()) {
       for (Character c : worldStates) {
         if (a.getState(0, c) == null) {
           printAndExit("Missing DNA for ant type " + a.name + ": " + c, null);
@@ -97,21 +97,21 @@ public class Application {
       }
     }
 
-    for (Point p : model.world.keySet()) {
-      if (!worldStates.contains(model.world.get(p))) {
+    for (Point p : universe.world.keySet()) {
+      if (!worldStates.contains(universe.world.get(p))) {
         printAndExit(
-            "Invalid world state '" + model.world.get(p) + "' at position " + p
+            "Invalid world state '" + universe.world.get(p) + "' at position " + p
                 .toString(), null);
       }
     }
 
     if (args.length > 0) {
       try {
-        model.moveNSteps(Integer.valueOf(args[0]));
+        universe.moveNSteps(Integer.valueOf(args[0]));
       } catch (NumberFormatException ignored) {
       }
 
-      System.out.println(Arrays.toString(model.population));
+      System.out.println(Arrays.toString(universe.population));
     }
   }
 
@@ -160,7 +160,7 @@ public class Application {
   }
 
   public static boolean validateAntName (String name) {
-    if (model.species.containsKey(name)) {
+    if (universe.species.containsKey(name)) {
       return false;
     }
 
