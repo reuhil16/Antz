@@ -1,6 +1,6 @@
-import Model.Ant;
-import Model.AntType;
-import Model.Universe;
+import model.Ant;
+import model.AntType;
+import model.Universe;
 
 import java.awt.*;
 import java.util.ArrayList;
