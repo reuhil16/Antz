@@ -1,37 +1,30 @@
 package Model;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.HashMap;
 
 public class Universe {
+  public HashMap<String, AntType>  species = new HashMap<>();
+  public HashMap<Point, Character> world   = new HashMap<>();
+  public Ant[]     population;
+  public Character defaultState;
 
-	public HashMap<String, AntType> species = new HashMap<>();
+  public void moveOneStep () {
+    for (Ant ant : population) {
+      ant.moveOneStep();
+    }
+  }
 
-	public HashMap<Point, Character> world = new HashMap<>();
+  public Character getState (Point position) {
+    if (world.containsKey(position)) {
+      return world.get(position);
+    }
+    return defaultState;
+  }
 
-	public Ant[] population;
-
-	public Character defaultState;
-
-	public void moveOneStep() {
-
-		for(Ant ant: population){
-			ant.moveOneStep();
-		}
-
-	}
-
-	public Character getState(Point position){
-		if (world.containsKey(position))
-			return world.get(position);
-		return defaultState;
-	}
-
-	public void moveNSteps(int n){
-
-		for(int i=0; i<n; i++){
-			moveOneStep();
-		}
-	}
-
+  public void moveNSteps (int n) {
+    for (int i = 0; i < n; i++) {
+      moveOneStep();
+    }
+  }
 }
