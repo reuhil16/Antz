@@ -1,8 +1,14 @@
+/*
+ * COSC326 - 2016 S2 - Étude 12 - Supersizing Ants
+ * Thomas Farr, Reuben Hilder, Ben Scott
+ * Java 8
+ */
+
 import model.Ant;
 import model.AntType;
 import model.Universe;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -100,8 +106,8 @@ public class Application {
     for (Point p : universe.world.keySet()) {
       if (!worldStates.contains(universe.world.get(p))) {
         printAndExit(
-            "Invalid world state '" + universe.world.get(p) + "' at position " + p
-                .toString(), null);
+            "Invalid world state '" + universe.world.get(p) + "' at position "
+            + p.toString(), null);
       }
     }
 

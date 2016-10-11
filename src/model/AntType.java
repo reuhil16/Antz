@@ -1,3 +1,9 @@
+/*
+ * COSC326 - 2016 S2 - Étude 12 - Supersizing Ants
+ * Thomas Farr, Reuben Hilder, Ben Scott
+ * Java 8
+ */
+
 package model;
 
 import java.util.HashMap;
