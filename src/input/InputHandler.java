@@ -29,7 +29,7 @@ public class InputHandler {
     String inputLine;
 
     while (sc.hasNextLine()) {
-      inputLine = sc.nextLine().trim();
+      inputLine = sc.nextLine();
       if (inputLine.indexOf("////") >= 0)
         inputLine = inputLine.substring(0, inputLine.indexOf("////"));
       line = sc.nextLine().trim().split("\\s+");
@@ -165,7 +165,7 @@ public class InputHandler {
     String inputLine;
 
     while (sc.hasNextLine()) {
-      inputLine = sc.nextLine().trim();
+      inputLine = sc.nextLine();
       if (inputLine.indexOf("////") >= 0)
         inputLine = inputLine.substring(0, inputLine.indexOf("////"));
       line = sc.nextLine().trim().split("\\s+");
