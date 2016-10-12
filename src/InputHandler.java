@@ -9,20 +9,20 @@ import model.AntType;
 import model.Universe;
 
 import java.awt.Point;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class Application {
+public class InputHandler {
   private static Universe universe;
 
-  public static void main (String[] args) {
+  public static void initialiseUniverse (InputStream in) {
     universe = new Universe();
     HashSet<Character> worldStates = new HashSet<>();
     ArrayList<Ant> ants = new ArrayList<>();
 
-    Scanner sc = new Scanner(System.in);
+    Scanner sc = new Scanner(in);
     String[] line;
 
     while (sc.hasNextLine()) {
@@ -111,6 +111,7 @@ public class Application {
       }
     }
 
+    /*
     if (args.length > 0) {
       try {
         universe.moveNSteps(Integer.valueOf(args[0]));
@@ -119,6 +120,7 @@ public class Application {
 
       System.out.println(Arrays.toString(universe.population));
     }
+    */
   }
 
   public static AntType parseAnt (Scanner sc, String name) {
