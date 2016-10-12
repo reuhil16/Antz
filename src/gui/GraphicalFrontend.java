@@ -39,8 +39,8 @@ import java.util.Map;
 
 public class GraphicalFrontend implements ApplicationListener {
   private static final float ZOOM_PER_SEC        = 0.75f;
-  private static final float TRANSLATION_PER_SEC = 640f;
-  private static final float CELL_SIZE           = 64f;
+  private static final float TRANSLATION_PER_SEC = 10f;
+  private static final float CELL_SIZE           = 1f;
   private static final float INITIAL_VIEW_SIZE   = 25 * CELL_SIZE;
 
   private final File     simulationSourceFile;
@@ -132,6 +132,12 @@ public class GraphicalFrontend implements ApplicationListener {
           return true;
         } else if (keycode == Input.Keys.UP || keycode == Input.Keys.DOWN) {
           verticalTranslation += keycode == Input.Keys.UP ? 1 : -1;
+          return true;
+        } else if (keycode == Input.Keys.NUM_0
+                   || keycode == Input.Keys.NUMPAD_0) {
+          camera.position.x = 0;
+          camera.position.y = 0;
+          camera.update();
           return true;
         }
         return false;
@@ -232,10 +238,14 @@ public class GraphicalFrontend implements ApplicationListener {
 
     // Camera zooming
     if (zooming != 0) {
-      camera.zoom += -zooming * ZOOM_PER_SEC * delta;
-      float minZoom = Gdx.graphics.getWidth() / camera.viewportWidth;
-      if (camera.zoom < minZoom) {
-        camera.zoom = minZoom;
+      camera.zoom -= zooming * ZOOM_PER_SEC * delta;
+      float viewW = camera.zoom * camera.viewportWidth;
+      float magnification = Gdx.graphics.getWidth() / viewW;
+
+      if (magnification < 10f || magnification > 100f) {
+        magnification = MathUtils.clamp(magnification, 10f, 100f);
+        camera.zoom =
+            Gdx.graphics.getWidth() / magnification / camera.viewportWidth;
       }
     }
 
@@ -264,12 +274,14 @@ public class GraphicalFrontend implements ApplicationListener {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     // Draw cells
-    float viewX = camera.position.x - camera.viewportWidth / 2f;
-    float viewY = camera.position.y - camera.viewportHeight / 2f;
+    float viewW = camera.viewportWidth * camera.zoom;
+    float viewH = camera.viewportHeight * camera.zoom;
+    float viewX = camera.position.x - viewW / 2f;
+    float viewY = camera.position.y - viewH / 2f;
     int xCell = MathUtils.floor(viewX / CELL_SIZE);
     int yCell = MathUtils.floor(viewY / CELL_SIZE);
-    int visWidthCells = MathUtils.ceil(camera.viewportWidth / CELL_SIZE) + 1;
-    int visHeightCells = MathUtils.ceil(camera.viewportHeight / CELL_SIZE) + 1;
+    int visWidthCells = MathUtils.ceil(viewW / CELL_SIZE) + 1;
+    int visHeightCells = MathUtils.ceil(viewH / CELL_SIZE) + 1;
 
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
     char state;
@@ -277,9 +289,9 @@ public class GraphicalFrontend implements ApplicationListener {
       for (int x = xCell; x < xCell + visWidthCells; ++x) {
         state = universe.getState(new Point(x, y));
         shapeRenderer.setColor(getColorForState(state));
-        shapeRenderer
-            .rect(x * CELL_SIZE + 4f, y * CELL_SIZE + 4f, CELL_SIZE - 8f,
-                  CELL_SIZE - 8f);
+        shapeRenderer.rect((x * (17f / 16f) - 0.5f) * CELL_SIZE,
+                           (y * (17f / 16f) - 0.5f) * CELL_SIZE,
+                           (7f / 8f) * CELL_SIZE, (7f / 8f) * CELL_SIZE);
       }
     }
     shapeRenderer.end();
