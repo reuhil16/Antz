@@ -43,9 +43,21 @@ public class Ant {
     }
     
     if (universe.wrap){
-      position.x = position.x % universe.width;
-      position.y = position.y % universe.height;
+      position.x = wrapPosition(position.x, universe.width);
+      position.y = wrapPosition(position.y, universe.height);
     }
+  }
+
+  private static int wrapPosition(int n, int size) {
+    int max = size / 2;
+    int min = -size / 2 + (size % 2 == 0 ? 1 : 0);
+
+    if (n < min) {
+      n = max - (n - min + 1);
+    } else if (n > max) {
+      n = min + (n - max - 1);
+    }
+    return n;
   }
 
   @Override
