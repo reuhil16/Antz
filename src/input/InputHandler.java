@@ -26,8 +26,12 @@ public class InputHandler {
 
     Scanner sc = new Scanner(in);
     String[] line;
+    String inputLine;
 
     while (sc.hasNextLine()) {
+      inputLine = sc.nextLine().trim();
+      if (inputLine.indexOf("////") >= 0)
+        inputLine = inputLine.substring(0, inputLine.indexOf("////"));
       line = sc.nextLine().trim().split("\\s+");
 
       if (line.length == 0) {
@@ -49,6 +53,7 @@ public class InputHandler {
           for (char c : line[1].toCharArray()) {
             worldStates.add(c);
           }
+          universe.states = line[1].toCharArray();
           continue;
         }
       }
