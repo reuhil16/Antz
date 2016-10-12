@@ -74,8 +74,8 @@ public class InputHandler {
             printAndExit("Duplicate size declaration:", line);
           }
           try {
-            x = Integer.valueOf(line[0]);
-            y = Integer.valueOf(line[1]);
+            x = Integer.valueOf(line[1]);
+            y = Integer.valueOf(line[2]);
           } catch (NumberFormatException e) {
             printAndExit("Invalid size:", line);
           }
@@ -171,7 +171,7 @@ public class InputHandler {
 
       int[] directions = new int[4];
       for (int i = 0; i < 4; i++) {
-        switch (line[1].charAt(i)) {
+        switch (line[1].toUpperCase().charAt(i)) {
           case 'N':
             directions[i] = 0;
             break;
