@@ -38,7 +38,7 @@ public class InputHandler {
             universe.species.put(line[1], parseAnt(sc, line[1]));
             continue;
           } else {
-            printAndExit("Duplicate or invalid Ant name: ", line);
+            printAndExit("Duplicate or invalid Ant name:", line);
           }
         }
 
@@ -68,10 +68,16 @@ public class InputHandler {
         }
         
         if (line[0].equalsIgnoreCase("size")) {
+          if (universe.wrap) {
+            printAndExit("Duplicate size declaration:", line);
+          }
           try {
             x = Integer.valueOf(line[0]);
             y = Integer.valueOf(line[1]);
           } catch (NumberFormatException e) {
+            printAndExit("Invalid size:", line);
+          }
+          if (x <= 0 || y <= 0){
             printAndExit("Invalid size:", line);
           }
           universe.wrap = true;
