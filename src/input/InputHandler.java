@@ -34,7 +34,7 @@ public class InputHandler {
         inputLine = inputLine.substring(0, inputLine.indexOf("//"));
       line = inputLine.trim().split("\\s+");
 
-      if (line.length == 0) {
+      if (line.length == 0 || (line.length == 1 && line[0].isEmpty()) ) {
         continue;
       }
 
@@ -170,7 +170,7 @@ public class InputHandler {
         inputLine = inputLine.substring(0, inputLine.indexOf("//"));
       line = inputLine.trim().split("\\s+");
 
-      if (line.length == 0) {
+      if (line.length == 0 || (line.length == 1 && line[0].isEmpty()) ) {
         continue;
       }
 
