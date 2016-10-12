@@ -49,8 +49,8 @@ public class Ant {
   }
 
   private static int wrapPosition(int n, int size) {
-    int max = size / 2;
-    int min = -size / 2 + (size % 2 == 0 ? 1 : 0);
+    int max = size - 1;
+    int min = -(size - 1);
 
     if (n < min) {
       n = max - (n - min + 1);

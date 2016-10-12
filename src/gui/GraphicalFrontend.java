@@ -321,15 +321,10 @@ public class GraphicalFrontend implements ApplicationListener {
     int visHeightCells = MathUtils.ceil(viewH / CELL_SIZE) + 1;
 
     if (universe.wrap) {
-      int minXCell = -universe.width / 2 + (universe.width % 2 == 0 ? 1 : 0);
-      int minYCell = -universe.height / 2 + (universe.height % 2 == 0 ? 1 : 0);
-      int maxXCell = universe.width / 2;
-      int maxYCell = universe.height / 2;
-
-      xCell = Math.max(xCell, minXCell);
-      yCell = Math.max(yCell, minYCell);
-      visWidthCells = Math.min(visWidthCells, maxXCell - xCell + 1);
-      visHeightCells = Math.min(visHeightCells, maxYCell - yCell + 1);
+      xCell = Math.max(xCell, -universe.width + 1);
+      yCell = Math.max(yCell, -universe.height + 1);
+      visWidthCells = Math.min(visWidthCells, universe.width - xCell);
+      visHeightCells = Math.min(visHeightCells, universe.height - yCell);
     }
 
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
