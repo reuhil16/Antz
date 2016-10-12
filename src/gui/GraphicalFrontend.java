@@ -115,7 +115,7 @@ public class GraphicalFrontend implements ApplicationListener {
 
     String[] antTypes = universe.species.keySet().toArray(new String[0]);
     if (antTypes.length > 0) {
-      antTypeColors.put(antTypes[0], Color.WHITE);
+      /*antTypeColors.put(antTypes[0], Color.WHITE);
 
       if (antTypes.length > 1) {
         float sector = 360f / (float) (antTypes.length - 1);
@@ -124,6 +124,12 @@ public class GraphicalFrontend implements ApplicationListener {
           antTypeColors.put(antTypes[i], ColorUtils
               .HSV_to_RGB(sector * (i - 1), 100f, 100f));
         }
+      }*/
+      float sector = 360f / (float) antTypes.length;
+
+      for (int i = 0; i < antTypes.length; ++i) {
+        antTypeColors.put(antTypes[i], ColorUtils
+            .HSV_to_RGB(sector * i, 100f, 100f));
       }
     }
   }
@@ -193,6 +199,13 @@ public class GraphicalFrontend implements ApplicationListener {
           return true;
         }
         return false;
+      }
+
+      @Override
+      public boolean touchDown (int screenX, int screenY, int pointer,
+                                int button) {
+        uiStage.setKeyboardFocus(null);
+        return true;
       }
     });
     Gdx.input.setInputProcessor(inputMultiplexer);
