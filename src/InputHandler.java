@@ -38,7 +38,7 @@ public class InputHandler {
             universe.species.put(line[1], parseAnt(sc, line[1]));
             continue;
           } else {
-            printAndExit("Duplicate or invalid Ant name:", line);
+            printAndExit("Duplicate or invalid Ant name: ", line);
           }
         }
 
@@ -96,7 +96,7 @@ public class InputHandler {
         for (int i = 0; i < 4; i++) {
           if (!worldStates.contains(a.getState(i, c))) {
             printAndExit("DNA for ant type " + a.name + ", " + c
-                         + " contains invalit target state: " + a
+                         + " contains invalid target state: " + a
                              .getState(i, c), null);
           }
         }
