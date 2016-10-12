@@ -4,6 +4,8 @@
  * Java 8
  */
 
+package input;
+
 import model.Ant;
 import model.AntType;
 import model.Universe;
