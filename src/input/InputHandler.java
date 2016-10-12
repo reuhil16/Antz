@@ -159,11 +159,20 @@ public class InputHandler {
   }
 
   public static AntType parseAnt (Scanner sc, String name) {
-    String[] line;
     AntType result = new AntType(name);
 
+    String[] line;
+    String inputLine;
+
     while (sc.hasNextLine()) {
+      inputLine = sc.nextLine().trim();
+      if (inputLine.indexOf("////") >= 0)
+        inputLine = inputLine.substring(0, inputLine.indexOf("////"));
       line = sc.nextLine().trim().split("\\s+");
+
+      if (line.length == 0) {
+        continue;
+      }
 
       if (line[0].equalsIgnoreCase("END")) {
         break;
