@@ -1,0 +1,68 @@
+{
+  com.badlogic.gdx.graphics.Color : {
+    white : { r: 1, g: 1, b: 1, a: 1 },
+    blue : { r: 0, g: 0.7, b: 0.96, a: 1},
+    grey : { r: 0.4, g: 0.4, b: 0.4, a: 1},
+    lightGrey : { r: 0.73, g: 0.73, b: 0.73, a: 1}
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle : {
+    default : { 
+      font : opensans_16_regular, 
+      fontColor : grey, 
+      background : label
+    },
+    white : { 
+      font : opensans_16_regular_stroke,
+      fontColor : white, 
+      background : label
+    },
+    withbg : {
+      font : opensans_16_regular, 
+      fontColor : grey, 
+      background : label_bg
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle : {
+    default : { 
+      up: button/up, 
+      down: button/down, 
+      over: button/over, 
+      disabled: button/disabled,
+      font: opensans_14_semibold, 
+      fontColor: grey, 
+      downFontColor: grey, 
+      overFontColor: grey, 
+      disabledFontColor: grey
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle : {
+    default : {
+      font : opensans_16_regular,
+      fontColor : grey,
+      messageFont : opensans_16_regular,
+      messageFontColor : lightGrey,
+      background : textfield/background/default,
+      focusedBackground : textfield/background/focused,
+      cursor : textfield/cursor,
+      selection : textfield/selection
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle : {
+    default : {
+      font : opensans_16_regular,
+      fontColor : grey,
+      background : selectbox/default,
+      backgroundOpen : selectbox/open,
+      scrollStyle : {
+        background : selectbox/list,
+        vScrollKnob : selectbox/scrollknob
+      },
+      listStyle : {
+        font : opensans_16_regular,
+        fontColorUnselected : grey,
+        fontColorSelected : blue,
+        selection : label
+      }
+    }
+  }
+}
