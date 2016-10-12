@@ -2,6 +2,9 @@
  * COSC326 - 2016 S2 - Étude 12 - Supersizing Ants
  * Thomas Farr, Reuben Hilder, Ben Scott
  * Java 8
+ *
+ * This class sourced from:
+ * https://github.com/kotcrab/libgdx-utils
  */
 
 /*******************************************************************************
@@ -24,10 +27,6 @@ package gui;
 
 import com.badlogic.gdx.graphics.Color;
 
-/**
- * Sourced from
- * <a href="https://github.com/kotcrab/libgdx-utils/blob/master/src/pl/kotcrab/libgdx/util/ColorUtils.java">here</a>
- */
 public class ColorUtils {
   /**
    * Converts HSV color sytem to RGB
