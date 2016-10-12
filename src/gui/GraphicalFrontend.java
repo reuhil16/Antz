@@ -43,7 +43,8 @@ public class GraphicalFrontend implements ApplicationListener {
   private static final float CELL_SIZE           = 64f;
   private static final float INITIAL_VIEW_SIZE   = 25 * CELL_SIZE;
 
-  private final Universe universe;
+  private final File     simulationSourceFile;
+  private       Universe universe;
   private       boolean  running;
   private       float    unusedTime;
   private int stepsPerSec = 10;
@@ -60,15 +61,34 @@ public class GraphicalFrontend implements ApplicationListener {
   private byte               horizontalTranslation;
   private byte               verticalTranslation;
 
-  private GraphicalFrontend (Universe universe) {
-    this.universe = universe;
+  private GraphicalFrontend (File simulationSourceFile) {
+    this.simulationSourceFile = simulationSourceFile;
+    readUniverse();
   }
 
   public static void main (String[] args) throws FileNotFoundException {
+    if (args.length < 1) {
+      System.err.println(
+          "usage: java gui.GraphicalFrontend <simulation_source_file>");
+      System.exit(1);
+    }
+    File sourceFile = new File(args[0]);
+    if (!sourceFile.exists() || !sourceFile.isFile()) {
+      System.err.println("`" + args[0] + "` is not a file!");
+      System.exit(1);
+    }
     LwjglApplicationConfiguration.disableAudio = true;
-    new LwjglApplication(new GraphicalFrontend(InputHandler.initialiseUniverse(
-        new FileInputStream(new File("random.txt")))), "Ants in ~SPACE~", 640,
-                         640);
+    new LwjglApplication(new GraphicalFrontend(sourceFile), "Ants in ~SPACE~",
+                         640, 640);
+  }
+
+  private void readUniverse () {
+    try {
+      this.universe = InputHandler
+          .initialiseUniverse(new FileInputStream(simulationSourceFile));
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException("Simulation source file is unreadable!", e);
+    }
   }
 
   /**
@@ -329,6 +349,12 @@ public class GraphicalFrontend implements ApplicationListener {
       Table left = new Table(skin);
 
       resetBtn = new TextButton("Reset", skin);
+      resetBtn.addListener(new ClickListener() {
+        @Override
+        public void clicked (InputEvent event, float x, float y) {
+          readUniverse();
+        }
+      });
       left.add(resetBtn).width(200);
 
       add(left).expandY().align(Align.top);
