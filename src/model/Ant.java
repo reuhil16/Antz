@@ -9,10 +9,10 @@ package model;
 import java.awt.Point;
 
 public class Ant {
-  public  int      lastDir;
+  private   int      lastDir;
   public  Point    position;
-  private Universe universe;
-  private AntType  type;
+  private final Universe universe;
+  public final AntType  type;
 
   public Ant (Universe universe, AntType type) {
     this.type = type;

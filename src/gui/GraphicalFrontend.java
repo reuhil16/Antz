@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import input.InputHandler;
+import model.Ant;
 import model.Universe;
 
 import java.awt.Point;
@@ -42,6 +43,8 @@ public class GraphicalFrontend implements ApplicationListener {
   private static final float TRANSLATION_PER_SEC = 10f;
   private static final float CELL_SIZE           = 1f;
   private static final float INITIAL_VIEW_SIZE   = 25 * CELL_SIZE;
+  private static final Color BG_COLOR            =
+      new Color(0.4f, 0.4f, 0.4f, 1f);
 
   private final File     simulationSourceFile;
   private       Universe universe;
@@ -49,6 +52,8 @@ public class GraphicalFrontend implements ApplicationListener {
   private       float    unusedTime;
   private int stepsPerSec = 10;
 
+  private Map<Character, Color>              stateColors    = new HashMap<>();
+  private Map<String, Color>                 antTypeColors  = new HashMap<>();
   private Map<String, FreeTypeFontGenerator> fontGenerators = new HashMap<>();
   private OrthographicCamera camera;
   private SpriteBatch        batch;
@@ -56,6 +61,7 @@ public class GraphicalFrontend implements ApplicationListener {
   private TextureAtlas       textureAtlas;
   private Skin               skin;
   private Stage              uiStage;
+  private BitmapFont         font;
   private Label              fpsLabel;
   private byte               zooming;
   private byte               horizontalTranslation;
@@ -84,10 +90,41 @@ public class GraphicalFrontend implements ApplicationListener {
 
   private void readUniverse () {
     try {
-      this.universe = InputHandler
+      universe = InputHandler
           .initialiseUniverse(new FileInputStream(simulationSourceFile));
     } catch (FileNotFoundException e) {
       throw new RuntimeException("Simulation source file is unreadable!", e);
+    }
+
+    stateColors.clear();
+    antTypeColors.clear();
+
+    stateColors.put(universe.defaultState, Color.WHITE);
+
+    if (universe.states.length > 1) {
+      stateColors.put(universe.states[1], Color.BLACK);
+      if (universe.states.length > 2) {
+        float sector = 360f / (float) (universe.states.length - 2);
+
+        for (int i = 2; i < universe.states.length; ++i) {
+          stateColors.put(universe.states[i],
+                          ColorUtils.HSV_to_RGB(sector * (i - 2), 100f, 100f));
+        }
+      }
+    }
+
+    String[] antTypes = universe.species.keySet().toArray(new String[0]);
+    if (antTypes.length > 0) {
+      antTypeColors.put(antTypes[0], Color.WHITE);
+
+      if (antTypes.length > 1) {
+        float sector = 360f / (float) (antTypes.length - 1);
+
+        for (int i = 1; i < antTypes.length; ++i) {
+          antTypeColors.put(antTypes[i], ColorUtils
+              .HSV_to_RGB(sector * (i - 1), 100f, 100f));
+        }
+      }
     }
   }
 
@@ -113,8 +150,8 @@ public class GraphicalFrontend implements ApplicationListener {
     skin = new Skin(textureAtlas);
     skin.add("opensans_14_semibold", generateFont(14, "OpenSans-Semibold"));
     skin.add("opensans_16_regular", generateFont(16, "OpenSans-Regular"));
-    skin.add("opensans_16_regular_stroke",
-             generateFont(16, "OpenSans-Regular", 1, Color.BLACK));
+    font = generateFont(16, "OpenSans-Regular", 1, Color.BLACK);
+    skin.add("opensans_16_regular_stroke", font);
     skin.load(Gdx.files.internal("ui.skin"));
 
     uiStage = new Stage(new ScreenViewport());
@@ -270,7 +307,7 @@ public class GraphicalFrontend implements ApplicationListener {
     shapeRenderer.setProjectionMatrix(camera.combined);
 
     // Clear the screen
-    Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
+    Gdx.gl.glClearColor(BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     // Draw cells
@@ -284,10 +321,15 @@ public class GraphicalFrontend implements ApplicationListener {
     int visHeightCells = MathUtils.ceil(viewH / CELL_SIZE) + 1;
 
     if (universe.wrap) {
-      xCell = Math.max(xCell, -universe.width / 2 + (universe.width % 2 == 0 ? 1 : 0));
-      yCell = Math.max(yCell, -universe.height / 2 + (universe.height % 2 == 0 ? 1 : 0));
-      visWidthCells = Math.min(visWidthCells, universe.width);
-      visHeightCells = Math.min(visHeightCells, universe.height);
+      int minXCell = -universe.width / 2 + (universe.width % 2 == 0 ? 1 : 0);
+      int minYCell = -universe.height / 2 + (universe.height % 2 == 0 ? 1 : 0);
+      int maxXCell = universe.width / 2;
+      int maxYCell = universe.height / 2;
+
+      xCell = Math.max(xCell, minXCell);
+      yCell = Math.max(yCell, minYCell);
+      visWidthCells = Math.min(visWidthCells, maxXCell - xCell + 1);
+      visHeightCells = Math.min(visHeightCells, maxYCell - yCell + 1);
     }
 
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -295,41 +337,80 @@ public class GraphicalFrontend implements ApplicationListener {
     for (int y = yCell; y < yCell + visHeightCells; ++y) {
       for (int x = xCell; x < xCell + visWidthCells; ++x) {
         state = universe.getState(new Point(x, y));
-        shapeRenderer.setColor(getColorForState(state));
-        shapeRenderer.rect((x * (17f / 16f) - 0.5f) * CELL_SIZE,
-                           (y * (17f / 16f) - 0.5f) * CELL_SIZE,
+        shapeRenderer.setColor(stateColors.get(state));
+        shapeRenderer.rect((x + (1f / 16f) - 0.5f) * CELL_SIZE,
+                           (y + (1f / 16f) - 0.5f) * CELL_SIZE,
                            (7f / 8f) * CELL_SIZE, (7f / 8f) * CELL_SIZE);
       }
     }
+
+    // Draw Ants
+    float radius = (7f / 8f) * (7f / 8f) * CELL_SIZE / 2f;
+    for (Ant ant : universe.population) {
+      shapeRenderer.setColor(Color.BLACK);
+      shapeRenderer
+          .arc(ant.position.x * CELL_SIZE, ant.position.y * CELL_SIZE, radius,
+               0f, 360f, 36);
+      shapeRenderer.setColor(antTypeColors.get(ant.type.name));
+      shapeRenderer.arc(ant.position.x * CELL_SIZE, ant.position.y * CELL_SIZE,
+                        (7f / 8f) * radius, 0f, 360f, 36);
+    }
     shapeRenderer.end();
+
+    // Draw Legend
+    drawLegend();
 
     // Draw UI
     uiStage.draw();
   }
 
-  private Color getColorForState (char state) {
-    if (state == universe.defaultState) {
-      return Color.WHITE;
-    } else {
-      int stateCount = universe.states.length;
-      int stateIdx = -1;
-      for (int i = 0; i < stateCount; ++i) {
-        if (universe.states[i] == state) {
-          stateIdx = i;
-          break;
-        }
-      }
-      if (stateIdx == -1) {
-        return Color.WHITE;
-      } else if (stateIdx == 1) {
-        return Color.BLACK;
-      }
+  private void drawLegend () {
+    batch.getProjectionMatrix()
+         .setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    shapeRenderer.getProjectionMatrix()
+                 .setToOrtho2D(0, 0, Gdx.graphics.getWidth(),
+                               Gdx.graphics.getHeight());
+    shapeRenderer.updateMatrices();
 
-      float sectorSize = 360f / (float) (stateCount - 2);
-      float hue = sectorSize * (stateIdx - 2);
-
-      return ColorUtils.HSV_to_RGB(hue, 100f, 100f);
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    float startY = Gdx.graphics.getHeight() - 120f;
+    float y = startY - 16f;
+    for (char s : universe.states) {
+      shapeRenderer.setColor(Color.BLACK);
+      shapeRenderer.rect(16f, y, 16f, 16f);
+      shapeRenderer.setColor(stateColors.get(s));
+      shapeRenderer.rect(17f, y + 1f, 14f, 14f);
+      y -= 20f;
     }
+
+    y -= 24f;
+
+    for (String antType : antTypeColors.keySet()) {
+      shapeRenderer.setColor(Color.BLACK);
+      shapeRenderer.arc(24f, y + 8f, 8f, 0f, 360f, 36);
+      shapeRenderer.setColor(antTypeColors.get(antType));
+      shapeRenderer.arc(24f, y + 8f, 7f, 0f, 360f, 36);
+      y -= 20f;
+    }
+    shapeRenderer.end();
+
+    batch.begin();
+    font.draw(batch, "States:", 16f, startY + 20f);
+    y = startY - 2f;
+    for (char s : universe.states) {
+      font.draw(batch, "= " + s, 36f, y);
+      y -= 20f;
+    }
+
+    y -= 4f;
+
+    font.draw(batch, "Species:", 16f, y);
+    y -= 20f;
+    for (String antType : antTypeColors.keySet()) {
+      font.draw(batch, "= " + antType, 36f, y);
+      y -= 20f;
+    }
+    batch.end();
   }
 
   @Override
