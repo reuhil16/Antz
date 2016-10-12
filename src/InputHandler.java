@@ -66,6 +66,19 @@ public class InputHandler {
           ants.add(ant);
           continue;
         }
+        
+        if (line[0].equalsIgnoreCase("size")) {
+          try {
+            x = Integer.valueOf(line[0]);
+            y = Integer.valueOf(line[1]);
+          } catch (NumberFormatException e) {
+            printAndExit("Invalid size:", line);
+          }
+          universe.wrap = true;
+          universe.width = x;
+          universe.height = y;
+          continue;
+        }
 
         if (line[2].length() == 1) {
           try {
@@ -108,6 +121,13 @@ public class InputHandler {
         printAndExit(
             "Invalid world state '" + universe.world.get(p) + "' at position "
             + p.toString(), null);
+      }
+    }
+    
+    if (universe.wrap){
+      for (Ant ant : universe.population){
+        ant.position.x = ant.position.x % universe.width;
+        ant.position.y = ant.position.y % universe.height;
       }
     }
     

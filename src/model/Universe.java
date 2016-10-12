@@ -14,6 +14,9 @@ public class Universe {
   public HashMap<Point, Character> world   = new HashMap<>();
   public Ant[]     population;
   public Character defaultState;
+  public int width;
+  public int height;
+  public boolean wrap;
 
   public void moveOneStep () {
     for (Ant ant : population) {

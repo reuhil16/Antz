@@ -41,6 +41,11 @@ public class Ant {
         position.translate(-1, 0);
         break;
     }
+    
+    if (universe.wrap){
+      position.x = position.x % universe.width;
+      position.y = position.y % universe.height;
+    }
   }
 
   @Override
