@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class InputHandler {
   private static Universe universe;
 
-  public static void initialiseUniverse (InputStream in) {
+  public static Universe initialiseUniverse (InputStream in) {
     universe = new Universe();
     HashSet<Character> worldStates = new HashSet<>();
     ArrayList<Ant> ants = new ArrayList<>();
@@ -110,6 +110,8 @@ public class InputHandler {
             + p.toString(), null);
       }
     }
+    
+    return universe;
 
     /*
     if (args.length > 0) {
