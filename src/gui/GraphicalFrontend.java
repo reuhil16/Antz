@@ -380,6 +380,14 @@ public class GraphicalFrontend implements ApplicationListener {
       t.add(nStepsField).width(100);
 
       doNStepsBtn = new TextButton("Go", skin);
+      doNStepsBtn.addListener(new ClickListener(Input.Buttons.LEFT) {
+        @Override
+        public void clicked (InputEvent event, float x, float y) {
+          if (!doNStepsBtn.isDisabled()) {
+            universe.moveNSteps(nStepsField.getValue());
+          }
+        }
+      });
       t.add(doNStepsBtn).width(100);
 
       right.add(t).width(200);
