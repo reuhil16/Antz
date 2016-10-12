@@ -10,4 +10,4 @@ CLASSPATH+=":$GDX_DIR/gdx-backend-lwjgl-natives.jar"
 CLASSPATH+=":$GDX_DIR/gdx-freetype.jar"
 CLASSPATH+=":$GDX_DIR/gdx-freetype-natives.jar"
 
-$JAVA -cp $CLASSPATH gui.GraphicalFrontend
+$JAVA -cp $CLASSPATH gui.GraphicalFrontend $@
