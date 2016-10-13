@@ -66,7 +66,7 @@ public class GraphicalFrontend implements ApplicationListener {
   private byte               zooming;
   private byte               horizontalTranslation;
   private byte               verticalTranslation;
-  
+
   private boolean drawGridLines = true;
 
   private GraphicalFrontend (File simulationSourceFile) {
@@ -294,26 +294,26 @@ public class GraphicalFrontend implements ApplicationListener {
       float viewW = camera.zoom * camera.viewportWidth;
       float magnification = Gdx.graphics.getWidth() / viewW;
 
-      
+
       /*
       if (magnification < 10f || magnification > 100f) {
-        
+
         magnification = MathUtils.clamp(magnification, 10f, 100f);
         camera.zoom =
             Gdx.graphics.getWidth() / magnification / camera.viewportWidth;
-            
+
         drawGridLines = false;
       } else {
         drawGridLines = true;
       }
       */
       if (magnification < 10f) {
-        
+
         drawGridLines = false;
       } else {
         drawGridLines = true;
       }
-      
+
       if (magnification > 500f) {
         magnification = 500f;
         camera.zoom =
@@ -373,8 +373,7 @@ public class GraphicalFrontend implements ApplicationListener {
                            (y + (1f / 16f) - 0.5f) * CELL_SIZE,
                            (7f / 8f) * CELL_SIZE, (7f / 8f) * CELL_SIZE);
         } else {
-          shapeRenderer.rect(x, y, CELL_SIZE, CELL_SIZE);
-          
+          shapeRenderer.rect((x - 0.5f) * CELL_SIZE, (y - 0.5f) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
       }
     }
