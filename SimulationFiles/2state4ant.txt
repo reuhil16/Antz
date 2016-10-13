@@ -1,0 +1,22 @@
+//This one's fascinating
+
+world bw 
+				
+size 50 50
+ 
+Ant v1	
+  b ESWN wwww 
+  w WNES bbbb
+  
+end				 
+ 
+Ant v2 
+  b WNES wwww
+  w ESWN bbbb
+end
+
+v1 0 0				
+v1 2 2
+
+v2 0 2
+v2 2 0
