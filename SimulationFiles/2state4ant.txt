@@ -7,7 +7,6 @@ size 50 50
 Ant v1	
   b ESWN wwww 
   w WNES bbbb
-  
 end				 
  
 Ant v2 

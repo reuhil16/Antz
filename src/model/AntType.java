@@ -21,7 +21,10 @@ public class AntType {
   }
 
   public Character getState (int lastDir, Character state) {
+    if (DNA.containsKey(state))
     return DNA.get(state).states[lastDir];
+    else
+      return null;
   }
 
   public void addChromosome (char state, int[] directions, char[] states) {

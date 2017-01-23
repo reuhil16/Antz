@@ -1,33 +1,39 @@
 // This is a sample file for creating ant simulations
 
 
-world bw 		//The allowed states are listed in the 'world' block. 
+world wb	//The allowed states are listed in the 'world' block. 
 				//This list must not include whitespace.
 				//The first state listed will be simulation's default state.
 				
-size 25 25		//In order to enable wrapping, use a 'size' declaration 
+size 100 100		//In order to enable wrapping, use a 'size' declaration 
 				//followed by the width and height of the simulation space.
 				//The simulation will range from -(width-1) to (width-1),
 				//and the same for height.
  
-Ant v1			//Ant types are created by declaring Ant followed by a name of 
+Ant Creator			//Ant types are created by declaring Ant followed by a name of 
 				//this species. 
 
-  b ESWN wwww	//DNA is specified in the same way as in the standard Etude. 
-  w WNES bbbb
+  w ESWN bbbb	//DNA is specified in the same way as in the standard Etude. 
+  b NWES bbbb
   
 end				//All ant type descriptions must finish with and 'end' line. 
  
-Ant v2 
-  b WNES wwww
-  w ESWN bbbb
+Ant Destroyer
+  b WNES wwww	
+  w SEWN wwww
 end
 
-v1 0 0			//Ants may be placed in the world by declaring the type
+Creator 0 0			//Ants may be placed in the world by declaring the type
 				//Followed by the desired coordinates.
 				
-v2 1 1
-				
+Destroyer 	0 1
+Destroyer 	-1 0
+Creator 	1 -1
+Destroyer 	-2 1
+Creator 	2 -2
+Creator 	-2 0
+Creator 	0 -2
+Destroyer 	-1 2				
 //0 0 w			//You can change the starting states of cells by specifying
 				//the coordinates of the cell followed by the state you wish
 				//to change it to.
