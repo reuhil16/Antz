@@ -49,7 +49,7 @@ public class InputHandler {
         }
 
         if (line[0].equalsIgnoreCase("World")) {
-          universe.defaultState = line[1].charAt(0);
+          universe.defaultStates = new  char[] {line[1].charAt(0)};
           for (char c : line[1].toCharArray()) {
             worldStates.add(c);
           }
@@ -100,7 +100,7 @@ public class InputHandler {
           } catch (NumberFormatException e) {
             printAndExit("Invalid ant position:", line);
           }
-          universe.world.put(new Point(x, y), line[2].charAt(0));
+          universe.setState(new Point(x, y), line[2].charAt(0));
           continue;
         }
       }
@@ -129,10 +129,10 @@ public class InputHandler {
       }
     }
 
-    for (Point p : universe.world.keySet()) {
-      if (!worldStates.contains(universe.world.get(p))) {
+    for (Point p : universe.getDefinedPoints()) {
+      if (!worldStates.contains(universe.getState(p))) {
         printAndExit(
-            "Invalid world state '" + universe.world.get(p) + "' at position "
+            "Invalid world state '" + universe.getState(p) + "' at position "
             + p.toString(), null);
       }
     }

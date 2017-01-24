@@ -9,21 +9,19 @@ package model;
 import java.awt.Point;
 
 public class Ant {
-  private   int      lastDir;
-  public  Point    position;
-  private final Universe universe;
-  public final AntType  type;
-
-  public Ant (Universe universe, AntType type) {
+  protected int lastDir;
+  public Point position;
+  protected final Universe universe;
+  public final AntType type;
+  public Ant(Universe universe, AntType type) {
     this.type = type;
     this.universe = universe;
   }
 
-  public void moveOneStep () {
+  public void moveOneStep() {
     int curDir = type.getMove(lastDir, universe.getState(position));
 
-    universe.world.put(new Point(position),
-                       type.getState(lastDir, universe.getState(position)));
+    universe.setState(new Point(position), type.getState(lastDir, universe.getState(position)));
 
     lastDir = curDir;
 
@@ -41,8 +39,8 @@ public class Ant {
         position.translate(-1, 0);
         break;
     }
-    
-    if (universe.wrap){
+
+    if (universe.wrap) {
       position.x = wrapPosition(position.x, universe.width);
       position.y = wrapPosition(position.y, universe.height);
     }
@@ -61,7 +59,7 @@ public class Ant {
   }
 
   @Override
-  public String toString () {
+  public String toString() {
     StringBuilder sb = new StringBuilder(type.name);
     sb.append(" at ");
     sb.append(position);

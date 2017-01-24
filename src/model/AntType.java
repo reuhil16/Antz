@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class AntType {
   public final String name;
-  private final HashMap<Character, Chromosome> DNA = new HashMap<>();
+  public final HashMap<Character, Chromosome> DNA = new HashMap<>();
 
   public AntType (String name) {
     this.name = name;

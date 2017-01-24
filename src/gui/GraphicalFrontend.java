@@ -101,7 +101,7 @@ public class GraphicalFrontend implements ApplicationListener {
     stateColors.clear();
     antTypeColors.clear();
 
-    stateColors.put(universe.defaultState, Color.WHITE);
+    stateColors.put(universe.defaultStates[0], Color.WHITE);
 
     if (universe.states.length > 1) {
       stateColors.put(universe.states[1], Color.BLACK);
