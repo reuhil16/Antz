@@ -63,13 +63,13 @@ public class Universe {
   }
   
   public char horizonSplitter(Point p){
-    if (p.x > 0) {
+    if (p.y > 0) {
       return defaultStates[0];
     }
     return defaultStates[1];
   }
 
-  private interface UnassignedStateResolver {
+  interface UnassignedStateResolver {
     char resolveState(Point p);
   }
 }

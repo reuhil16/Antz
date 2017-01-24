@@ -8,11 +8,14 @@ package input;
 
 import model.Ant;
 import model.AntType;
+import model.GAMaster;
+import model.GAUniverse;
 import model.Universe;
 
 import java.awt.Point;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -20,13 +23,47 @@ public class InputHandler {
   private static Universe universe;
 
   public static Universe initialiseUniverse (InputStream in) {
-    universe = new Universe();
-    HashSet<Character> worldStates = new HashSet<>();
-    ArrayList<Ant> ants = new ArrayList<>();
-
     Scanner sc = new Scanner(in);
     String[] line;
     String inputLine;
+    
+    if(sc.hasNext() && sc.next().equals("GA")) {
+      GAUniverse gAUniverse = new GAUniverse();
+      universe = gAUniverse;
+      gAUniverse.master = new GAMaster(gAUniverse);
+      universe.defaultStates = new char[]{'w', 'b'};
+      universe.width = 100;
+      universe.height = 100;
+      universe.wrap = false;
+      universe.states = new char[]{'w', 'b', 'r', 'y', 'g', 'c', 'p'};
+      gAUniverse.energyCosts = new HashMap<>();
+      
+      gAUniverse.energyCosts.put('w', 0);
+      gAUniverse.energyCosts.put('b', 100);
+      gAUniverse.energyCosts.put('r', 0);
+      gAUniverse.energyCosts.put('g', 0);
+      gAUniverse.energyCosts.put('y', 40);
+      gAUniverse.energyCosts.put('c', 8);
+      gAUniverse.energyCosts.put('p', 100);
+      
+      gAUniverse.master.spawnXMin = 0;
+      gAUniverse.master.spawnXRange = 150;
+      gAUniverse.master.spawnYMin = -4;
+      gAUniverse.master.spawnYRange = 8;
+      
+      gAUniverse.master.initialise();
+      
+      gAUniverse.setState(new Point(-20, 0), 'g');
+      
+      sc.close();
+      
+      return universe;
+    }
+    sc.nextLine();
+    
+    universe = new Universe();
+    HashSet<Character> worldStates = new HashSet<>();
+    ArrayList<Ant> ants = new ArrayList<>();
 
     while (sc.hasNextLine()) {
       inputLine = sc.nextLine();

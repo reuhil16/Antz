@@ -381,6 +381,8 @@ public class GraphicalFrontend implements ApplicationListener {
     // Draw Ants
     float radius = (7f / 8f) * (7f / 8f) * CELL_SIZE / 2f;
     for (Ant ant : universe.population) {
+      if (!antTypeColors.containsKey(ant))
+        break;
       shapeRenderer.setColor(Color.BLACK);
       shapeRenderer
           .arc(ant.position.x * CELL_SIZE, ant.position.y * CELL_SIZE, radius,

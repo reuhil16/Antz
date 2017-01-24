@@ -7,21 +7,25 @@ import java.util.Random;
 
 public class GAMaster {
 
-  private double mutation;
-  private int eliteism;
-  private int simulationLength;
+  private double mutation = 0.05;
+  private int eliteism = 5;
+  private int simulationLength = 500;
   private int stepCount;
-  private Random rng;
-  private int generationSize;
+  private Random rng = new Random();
+  private int generationSize = 50;
   private int generationNum;
   private int indevidualNum;
-  public static int stepEnergy;
+  public static final int stepEnergy = 5;
   private Universe universe;
   
   public int spawnXRange;
   public int spawnXMin;
   public int spawnYRange;
   public int spawnYMin;
+
+  public GAMaster(Universe universe) {
+    this.universe = universe;
+  }
 
   private AntType generateChild(AntType father, AntType mother) {
     AntType child = new AntType(generationNum + ":" + indevidualNum);
@@ -65,11 +69,14 @@ public class GAMaster {
     int totalEnergy = 0;
       for (int i = 0; i < oldPop.length; i++) {
         oldPop[i].energy -= oldPop[oldPop.length - 1].energy;
-        totalEnergy += oldPop[i].energy;
       }
     
     for (int i = 0; i < eliteism; i++) {
       newPop[i] = oldPop[i].type;
+    }
+    
+    for (int i = 0; i < oldPop.length; i++) {
+      totalEnergy += oldPop[i].energy;
     }
     
     for (int i = eliteism; i < generationSize; i++) {
@@ -78,7 +85,7 @@ public class GAMaster {
       //select father
       int energyCost = rng.nextInt(totalEnergy);
       for (GAnt a : oldPop) {
-        if (a.energy < energyCost)  {
+        if (a.energy > energyCost)  {
           father = a.type;
           energyCost = rng.nextInt(totalEnergy - a.energy);
           break;
@@ -91,7 +98,7 @@ public class GAMaster {
       for (GAnt a : oldPop) {
         if (a.type.equals(father))
           continue;
-        if (a.energy < energyCost)  {
+        if (a.energy > energyCost)  {
           mother = a.type;
           break;
         } else {
@@ -109,7 +116,7 @@ public class GAMaster {
     HashSet<Point> usedSpawns = new HashSet<>();
     for(int i = 0; i < generationSize; i++) {
       universe.species.put(newPop[i].name, newPop[i]);
-      universe.population[i] = new Ant(universe, newPop[i]);
+      universe.population[i] = new GAnt((GAUniverse) universe, newPop[i]);
       Point p;
       do {
       p = new Point(rng.nextInt(spawnXRange) + spawnXMin, rng.nextInt(spawnYRange) + spawnYMin);
@@ -119,6 +126,38 @@ public class GAMaster {
     }
   }
 
+  public void initialise() {
+    universe.clean();
+    universe.population = new GAnt[generationSize];
+    HashSet<Point> usedSpawns = new HashSet<>();
+    AntType newType;
+    char[] states;
+    int[] directions;
+    for(int i = 0; i < generationSize; i++) {
+      newType = new AntType("0:" + indevidualNum);
+      
+      for(char state : universe.states) {
+        states = new char[4];
+        directions = new int[4];
+        for(int j = 0; j < 4; j++){
+          states[j] = universe.states[rng.nextInt(universe.states.length)];
+          directions[j] = rng.nextInt(4);
+        }
+        newType.addChromosome(state, directions, states);
+      }
+      
+      universe.species.put(newType.name, newType);
+      universe.population[i] = new GAnt((GAUniverse) universe, newType);
+      Point p;
+      do {
+      p = new Point(rng.nextInt(spawnXRange) + spawnXMin, rng.nextInt(spawnYRange) + spawnYMin);
+      } while (usedSpawns.contains(p));
+      universe.population[i].position = p;
+      usedSpawns.add(p);
+      indevidualNum++;
+    }
+  }
+  
   public void update() {
     stepCount++;
     if (stepCount > simulationLength) {

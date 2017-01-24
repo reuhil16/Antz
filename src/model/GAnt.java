@@ -2,7 +2,7 @@ package model;
 
 public class GAnt extends Ant implements Comparable<GAnt>{
   
-  public int energy;
+  public int energy = 250;
 
   public GAnt(GAUniverse universe, AntType type) {
     super(universe, type);
@@ -24,7 +24,7 @@ public class GAnt extends Ant implements Comparable<GAnt>{
   }
 
   public int compareTo(GAnt o) {
-    return energy - o.energy;
+    return o.energy - energy;
   }
 
 }
