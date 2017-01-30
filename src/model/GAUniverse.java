@@ -14,6 +14,16 @@ public class GAUniverse extends Universe {
   public GAUniverse() {
     resolver = this::horizonSplitter;
   }
+  
+  public GAUniverse(Universe base){
+    resolver = this::horizonSplitter;
+    width = base.width;
+    height = base.height;
+    wrap = base.wrap;
+    species = base.species;
+    states = base.states;
+    
+  }
 
   public void moveOneStep() {
     master.update();

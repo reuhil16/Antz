@@ -14,7 +14,6 @@ public class Universe {
   public HashMap<String, AntType> species = new HashMap<>();
   private HashMap<Point, Character> world = new HashMap<>();
   public Ant[] population;
-  public char[] defaultStates;
   public UnassignedStateResolver resolver;
   public char[] states;
   public int width;
@@ -59,14 +58,14 @@ public class Universe {
   }
 
   public char defaultStateResolver(Point p) {
-    return defaultStates[0];
+    return states[0];
   }
   
   public char horizonSplitter(Point p){
     if (p.y > 0) {
-      return defaultStates[0];
+      return states[0];
     }
-    return defaultStates[1];
+    return states[1];
   }
 
   interface UnassignedStateResolver {

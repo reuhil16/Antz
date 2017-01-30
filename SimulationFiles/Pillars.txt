@@ -20,7 +20,7 @@ Ant v1			//Ant types are created by declaring Ant followed by a name of
   e WSEN ffff
   f ENWS aaaa
   
-end				//All ant type descriptions must finish with and 'end' line. 
+end				//All ant type descriptions must finish with an 'end' line. 
  
 Ant v2 
   d ESWN cccc	

@@ -101,7 +101,7 @@ public class GraphicalFrontend implements ApplicationListener {
     stateColors.clear();
     antTypeColors.clear();
 
-    stateColors.put(universe.defaultStates[0], Color.WHITE);
+    stateColors.put(universe.states[0], Color.WHITE);
 
     if (universe.states.length > 1) {
       stateColors.put(universe.states[1], Color.BLACK);
@@ -117,7 +117,7 @@ public class GraphicalFrontend implements ApplicationListener {
 
     String[] antTypes = universe.species.keySet().toArray(new String[0]);
     if (antTypes.length > 0) {
-      /*antTypeColors.put(antTypes[0], Color.WHITE);
+      antTypeColors.put(antTypes[0], Color.WHITE);
 
       if (antTypes.length > 1) {
         float sector = 360f / (float) (antTypes.length - 1);
@@ -126,7 +126,7 @@ public class GraphicalFrontend implements ApplicationListener {
           antTypeColors.put(antTypes[i], ColorUtils
               .HSV_to_RGB(sector * (i - 1), 100f, 100f));
         }
-      }*/
+      }
       float sector = 360f / (float) antTypes.length;
 
       for (int i = 0; i < antTypes.length; ++i) {
@@ -381,8 +381,8 @@ public class GraphicalFrontend implements ApplicationListener {
     // Draw Ants
     float radius = (7f / 8f) * (7f / 8f) * CELL_SIZE / 2f;
     for (Ant ant : universe.population) {
-      if (!antTypeColors.containsKey(ant))
-        break;
+      if (!antTypeColors.containsKey(ant.type.name))
+        continue;
       shapeRenderer.setColor(Color.BLACK);
       shapeRenderer
           .arc(ant.position.x * CELL_SIZE, ant.position.y * CELL_SIZE, radius,

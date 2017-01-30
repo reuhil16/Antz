@@ -1,6 +1,3 @@
-// This is a sample file for creating ant simulations
-
-
 world wb 		//The allowed states are listed in the 'world' block. 
 				//This list must not include whitespace.
 				//The first state listed will be simulation's default state.
